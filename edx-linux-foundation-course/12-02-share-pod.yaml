@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: share-pod
+  labels:
+    app: share-pod
+spec:
+  volumes:
+  - name: host-volume
+    hostPath:
+      path: /home/docker/pod-volume
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - mountPath: /user/share/nginx/html
+      name: host-volume
+  - image: debian
+    name: debian
+    volumeMounts:
+    - mountPath: /host-vol
+      name: host-volume
+    command: ["/bin/sh", "-c", "echo Introduction To Kubernetes > /host-vol/index/html; sleep 3600"]
